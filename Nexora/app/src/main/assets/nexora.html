@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nexora</title>
+<style>
+:root{--bg:#f5f5f8;--sf:#ffffff;--ln:#d8d8e0;--tx:#18191b;--mu:#6a6b75;--ac:#4a5bd6;--ao:#ffffff;--vb:#3a86ff;--sky:#56c2f5;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#18191b;--sf:#242529;--ln:#35363b;--tx:#e8e8ec;--mu:#9a9ba3;--ao:#10131f}}
+:root[data-theme="dark"]{--bg:#18191b;--sf:#242529;--ln:#35363b;--tx:#e8e8ec;--mu:#9a9ba3;--ao:#10131f}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{height:100%;margin:0;background:var(--bg);color:var(--tx);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+#app{max-width:480px;height:100%;margin:0 auto;display:flex;flex-direction:column;position:relative;overflow:hidden}
+button,select,input{font:inherit;color:inherit}
+.bar{display:flex;justify-content:center;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--ln)}
+.cp .bar{padding:5px 12px}
+.ab{flex:none;max-width:100%;min-width:0;width:300px;transition:width .35s cubic-bezier(.3,.8,.3,1);height:44px;position:relative;overflow:hidden;border-radius:22px;border:1px solid var(--ln);background:var(--sf)}
+.cp .ab{height:36px}
+.ab:focus-within{border-color:var(--ac)}
+#ab{width:100%;height:100%;box-sizing:border-box;padding:0 18px;border:0;background:none;outline:none}
+.ld{position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--vb);opacity:0;pointer-events:none}
+.ld.on{opacity:1;animation:ld 1.1s cubic-bezier(.2,.6,.3,1) forwards}
+@keyframes ld{0%{width:0}70%{width:85%}100%{width:100%}}
+.ib{width:40px;height:40px;border:0;background:none;color:inherit;border-radius:50%;font-size:22px;cursor:pointer;flex:none;display:grid;place-items:center}
+.i{display:block;flex:none;pointer-events:none}
+.ib:focus-visible,.row:focus-visible,.mi:focus-visible,.card:focus-visible{outline:2px solid var(--ac);outline-offset:-2px}
+.cnt{width:28px;height:28px;border:2px solid var(--tx);border-radius:8px;background:none;font-size:13px;font-weight:700;cursor:pointer;flex:none}
+main{flex:1;overflow:auto}
+.nt{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:44px;font-weight:800;letter-spacing:-1px}
+.nt small{font-size:14px;font-weight:400;color:var(--mu);letter-spacing:0;margin-top:8px}
+.pg{padding:56px 28px;text-align:center}
+.pg h2{margin:16px 0 4px;font-size:26px}
+.pg p{margin:6px 0;word-break:break-all;color:var(--mu)}
+.fav,.av{display:grid;place-items:center;border-radius:50%;background:var(--ac);color:var(--ao);font-weight:700}
+.fav{width:72px;height:72px;margin:0 auto;font-size:30px}
+.av{width:44px;height:44px;flex:none}
+.btn{display:inline-block;margin-top:20px;padding:12px 20px;border-radius:22px;background:var(--ac);color:var(--ao);text-decoration:none;font-weight:600}
+.hd{display:flex;align-items:center;gap:8px;padding:10px 12px}
+.hd h1{flex:1;margin:0;font-size:22px;font-weight:600}
+.hd .tx{color:var(--ac);background:none;border:0;padding:8px;cursor:pointer;font-weight:600}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;box-sizing:border-box;padding:14px 20px;background:none;border:0;text-align:left;cursor:pointer}
+.row b{display:block;font-weight:600}
+.row small,.card small{display:block;color:var(--mu);font-size:14px}
+.row input,.row select{max-width:46%;padding:10px 12px;border-radius:12px;border:1px solid var(--ln);background:var(--sf)}
+.row input[type=color]{padding:2px;width:48px;height:36px}
+.sw{width:52px;height:30px;border-radius:15px;border:0;background:var(--ln);position:relative;cursor:pointer;flex:none}
+.sw::after{content:"";position:absolute;top:4px;left:4px;width:22px;height:22px;border-radius:50%;background:var(--mu);transition:transform .15s}
+.sw[aria-checked=true]{background:var(--ac)}
+.sw[aria-checked=true]::after{transform:translateX(22px);background:var(--ao)}
+.seg{display:flex;margin:6px 16px 12px;padding:4px;border:1px solid var(--ln);border-radius:26px}
+.seg button{flex:1;padding:10px;border:0;border-radius:22px;background:none;cursor:pointer;color:var(--mu)}
+.seg button[aria-pressed=true]{background:var(--sf);color:var(--tx);font-weight:600}
+.card{display:flex;align-items:center;gap:14px;margin:0 16px 10px;padding:14px;border:1px solid var(--ln);border-radius:16px;background:var(--sf);cursor:pointer}
+.card.on{border-color:var(--ac)}
+.card>div{flex:1;min-width:0}
+.mu{color:var(--mu);text-align:center;padding:48px 32px}
+.ov{position:absolute;inset:0;z-index:5}
+.menu{position:absolute;right:12px;top:60px;width:min(300px,86%);max-height:calc(100% - 80px);overflow:auto;z-index:6;background:var(--sf);border:1px solid var(--ln);border-radius:20px;box-shadow:0 8px 28px rgba(0,0,0,.35)}
+.nr{display:flex;justify-content:space-around;padding:8px;border-bottom:1px solid var(--ln)}
+.nr .ib:disabled{opacity:.35}
+.mi{display:flex;gap:18px;align-items:center;width:100%;padding:14px 20px;border:0;background:none;text-align:left;cursor:pointer}
+.mi i{display:grid;place-items:center;width:24px;font-style:normal;color:var(--mu)}
+.ci{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--sf);color:var(--ac);flex:none}
+.chev{display:grid;color:var(--mu)}
+.fv{display:grid;place-items:center;width:44px;height:44px;flex:none;border-radius:50%;background:hsl(var(--h) 45% 42%);color:#fff;font-weight:700;font-size:18px}
+.dm .fv{width:26px;height:26px;font-size:13px}
+.fv.fvi{background:var(--sf);border:1px solid var(--ln);box-sizing:border-box}
+.fv.fvi img{width:60%;height:60%;object-fit:contain;border-radius:3px}
+.card.flat{border:0;background:none;border-radius:0;margin:0;padding:12px 20px}
+.cnt,.mb{transition:opacity .15s}
+.abw{flex:1;min-width:0;display:flex;justify-content:center}
+.sb{border-bottom:1px solid var(--ln)}
+.sbi{display:flex;align-items:center;gap:8px;margin:8px 12px 4px;padding:0 6px 0 14px;height:44px;border:1px solid var(--ln);border-radius:22px;background:var(--sf);color:var(--mu)}
+.cp .sbi{height:36px}.sbi:focus-within{border-color:var(--ac)}
+.sbi input{flex:1;min-width:0;border:0;background:none;outline:none;color:var(--tx)}
+.sb .st{border-bottom:0;position:static}
+.av svg{width:22px;height:22px}
+.mi:disabled{opacity:.4}
+hr{border:0;border-top:1px solid var(--ln);margin:0}
+.find{display:flex;gap:8px;padding:8px 12px;border-top:1px solid var(--ln)}
+.find input{flex:1;padding:10px 14px;border-radius:20px;border:1px solid var(--ln);background:var(--sf)}
+#toast{position:fixed;left:50%;bottom:calc(36px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--sf);border:1px solid var(--ln);padding:10px 18px;border-radius:22px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9;max-width:80%}
+#toast.on{opacity:1}
+.mb{position:relative}
+.ring{position:absolute;inset:0;border-radius:50%;display:none;background:conic-gradient(var(--sky) calc(var(--p,0)*1%),var(--ln) 0);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 0);mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 0)}
+.bd{display:none;position:absolute;top:-2px;right:-2px;min-width:18px;height:18px;border-radius:9px;background:var(--sky);color:#06222f;font-size:11px;font-weight:700;line-height:18px;text-align:center;font-style:normal}
+.mb.dl .ring,.mb.dl .bd{display:block}
+.pb{height:6px;border-radius:3px;background:var(--ln);margin-top:8px;overflow:hidden}
+.pb i{display:block;height:100%;width:0;background:var(--sky)}
+.card>div.th{flex:none}
+.st{display:flex;gap:4px;padding:0 12px;border-bottom:1px solid var(--ln);overflow-x:auto;position:sticky;top:0;z-index:2;background:var(--bg)}
+.st button{padding:12px 14px;border:0;border-bottom:3px solid transparent;background:none;color:var(--mu);cursor:pointer;white-space:nowrap}
+.st button[aria-selected=true]{color:var(--ac);border-bottom-color:var(--ac);font-weight:600}
+.rh{margin:0;padding:14px 20px;color:var(--mu);font-size:.88em}
+.rs{display:block;margin:0 16px 12px;padding:16px;border:1px solid var(--ln);border-radius:18px;background:var(--sf);cursor:pointer}
+.rs b{display:block;margin:8px 0 4px;color:var(--ac);font-size:1.12em;font-weight:600}
+.rs p{margin:0;color:var(--mu);font-size:.94em}
+.rs small{color:var(--mu)}
+.dm{display:flex;align-items:center;gap:10px}
+.dm .av{width:26px;height:26px;font-size:13px}
+.gal{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px 16px}
+.im{aspect-ratio:1;border-radius:16px;display:flex;align-items:flex-end;padding:10px;color:#fff;font-size:13px;background:linear-gradient(135deg,hsl(var(--h) 60% 45%),hsl(calc(var(--h) + 40) 60% 28%))}
+.th{width:96px;height:64px;border-radius:12px;display:grid;place-items:center;color:#fff;background:hsl(var(--h) 55% 38%)}
+.card{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.card.sl{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 14%,var(--sf))}
+.ck{width:24px;height:24px;border-radius:50%;border:2px solid var(--mu);display:grid;place-items:center;flex:none;font-size:14px;box-sizing:border-box}
+.sl .ck{background:var(--ac);border-color:var(--ac);color:var(--ao)}
+.hd .tx:disabled{opacity:.4;cursor:default}
+.menu{view-transition-name:menu}
+::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation-duration:.26s;animation-timing-function:cubic-bezier(.3,.8,.3,1)}
+html[data-dir=fwd]::view-transition-new(root){animation-name:inR}
+html[data-dir=fwd]::view-transition-old(root){animation-name:outL}
+html[data-dir=back]::view-transition-new(root){animation-name:inL}
+html[data-dir=back]::view-transition-old(root){animation-name:outR}
+::view-transition-old(menu){animation:.14s ease-in both mx}
+::view-transition-new(menu){animation:.22s cubic-bezier(.2,.9,.3,1) both mp}
+::view-transition-old(menu),::view-transition-new(menu){transform-origin:top right}
+@keyframes inR{from{opacity:0;transform:translateX(28px)}}
+@keyframes outL{to{opacity:0;transform:translateX(-28px)}}
+@keyframes inL{from{opacity:0;transform:translateX(-28px)}}
+@keyframes outR{to{opacity:0;transform:translateX(28px)}}
+@keyframes mp{from{opacity:0;transform:scale(.9) translateY(-8px)}}
+@keyframes mx{to{opacity:0;transform:scale(.9) translateY(-8px)}}
+.rv{min-height:100%;background:var(--bg);color:var(--tx);font-size:var(--fs,16px);font-family:var(--ff,inherit)}
+.rv.lt{--bg:#f5f5f8;--sf:#fff;--ln:#d8d8e0;--tx:#18191b;--mu:#6a6b75}
+.rv.dk{--bg:#18191b;--sf:#242529;--ln:#35363b;--tx:#e8e8ec;--mu:#9a9ba3}
+.rv.cr .rs{padding:10px 14px;margin-bottom:8px}
+.rv.cr .rs b{margin:4px 0 2px}
+.rs.ad{border-style:dashed}
+.sh{margin:16px 20px 6px;font-weight:700;color:var(--ac)}
+.tcs{display:flex;gap:12px;padding:6px 20px 14px}
+.tc{position:relative;flex:1;height:84px;border-radius:12px;border:1px solid var(--ln);padding:20px 22px;display:flex;flex-direction:column;gap:8px;cursor:pointer;background:#fff}
+.tc i{display:block;height:6px;border-radius:3px;background:#333}
+.tc.dark{background:#1c1c1e}.tc.dark i{background:#ddd}.tc.dark i:first-child{background:#a8b8ff}
+.tc.auto{background:linear-gradient(90deg,#fff 50%,#1c1c1e 50%)}.tc.auto i{background:#888}
+.tc.on{border:2px solid var(--ac)}
+.tk{position:absolute;right:-6px;bottom:-8px;width:26px;height:26px;border-radius:50%;background:var(--ac);color:var(--ao);display:grid;place-items:center}
+.tk svg{width:15px;height:15px}
+.rd label{display:block;padding:12px 20px;cursor:pointer}
+.rd input[type=radio]{accent-color:var(--ac);margin-right:10px}
+.rd small{display:block;margin-left:28px;color:var(--mu);font-size:14px}
+.er{color:#ff6b6b;font-size:14px;padding:0 20px 8px;margin:0}
+.note{margin:12px 20px;color:var(--mu);font-size:14px}
+#ui{display:contents}
+.gate{min-height:100%;display:grid;place-content:center;text-align:center;padding:32px;gap:8px}
+.gate h1{margin:0;font-size:40px;letter-spacing:-1px}.gate p{margin:0;color:var(--mu)}
+.ck2{color:var(--ac);display:grid}
+@media (prefers-reduced-motion:reduce){.sw::after,#toast{transition:none}.ld.on{animation:none;width:100%}.ab{transition:none}}
+html.live body{background:transparent}
+.bar,.sb,.find{background:var(--bg)}
+html,body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
+</style>
+</head>
+<body>
+<div id="app"><div id="ui"></div></div>
+<div id="toast" role="status"></div>
+<script>
+const $=s=>document.querySelector(s),app=$('#app'),ui=$('#ui');
+const ld=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}};
+const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const ENG={'Google':'https://www.google.com/search?q=','Bing':'https://www.bing.com/search?q=','DuckDuckGo':'https://duckduckgo.com/?q=','Brave Search':'https://search.brave.com/search?q=','Yahoo':'https://search.yahoo.com/search?p=','Wikipedia':'https://en.wikipedia.org/w/index.php?search='};
+let st=Object.assign({engine:'Brave Search',home:'',theme:'dark',accent:'#a8b8ff',compact:false,adblock:true,js:true,cookies:true,popups:false,newtab:false,confirm:true,desktop:false,rtheme:'auto',rnames:true,ricons:true,rfs:'Medium',rfont:'System',rcompact:false,rlang:'Browser preference',rinf:false,rnew:false,btrack:true,sdns:true,sdnsMode:'auto',sdnsProv:'Cloudflare (1.1.1.1)',sdnsUrl:'',lang:'en',plangs:['en'],offerTr:true,spell:true,startup:'new',spages:[],bgload:true},ld('nx.st',{}));
+let hist=ld('nx.hist',[]),bm=ld('nx.bm',[]),FV=ld('nx.fav',{}),caps={};
+let tabs=[{inc:false,h:[''],i:0}],cur=0,view='browse',menu=false,tm=false,tmode=false,closed=[],finding=false,dl=[],addLink=false,loading=false,rtab='all',sel=null,uid=0,abW=300,lp=false,rcount=6;
+const T=()=>tabs[cur],U=()=>T().h[T().i];
+const LANGS=[['en','English'],['fil','Filipino'],['ceb','Cebuano'],['es','Español'],['fr','Français'],['de','Deutsch'],['ja','日本語'],['id','Bahasa Indonesia'],['zh','中文'],['ko','한국어'],['pt','Português'],['hi','हिन्दी'],['ar','العربية']];
+const lname=c=>(LANGS.find(l=>l[0]===c)||[c,c])[1];
+const KEYS=['Settings','General','On startup','Language','Privacy & Security','Appearance','Tabs','Advanced','Home','New tab','New incognito tab','Bookmarks','History','Downloads','Desktop site','Add to bookmarks','Find in page','Open with','Share','Translate page','Search or enter address','JavaScript','Cookies','Open the New tab page','Continue where you left off','Open a specific page or set of pages','Display language','Preferred languages','Add language','Offer to translate pages','Spell check','Add','Use current pages'];
+const PACK={
+fil:'Mga Setting|Pangkalahatan|Sa pagsisimula|Wika|Privacy at Seguridad|Hitsura|Mga Tab|Advanced|Home|Bagong tab|Bagong incognito tab|Mga Bookmark|Kasaysayan|Mga Download|Desktop site|Idagdag sa bookmark|Hanapin sa pahina|Buksan gamit ang|Ibahagi|Isalin ang pahina|Maghanap o maglagay ng address|JavaScript|Mga Cookie|Buksan ang pahina ng Bagong tab|Magpatuloy kung saan ka tumigil|Magbukas ng partikular na pahina o hanay ng mga pahina|Wika ng display|Mga gustong wika|Magdagdag ng wika|Mag-alok na isalin ang mga pahina|Spell check|Idagdag|Gamitin ang kasalukuyang mga pahina',
+ceb:'Mga Setting|Kinatibuk-an|Sa pagsugod|Pinulongan|Pribasiya ug Seguridad|Hitsura|Mga Tab|Advanced|Home|Bag-ong tab|Bag-ong incognito tab|Mga Bookmark|Kasaysayan|Mga Download|Desktop site|Idugang sa bookmark|Pangita sa panid|Ablihi gamit ang|Ipaambit|Hubara ang panid|Pangita o isulod ang address|JavaScript|Mga Cookie|Ablihi ang panid sa Bag-ong tab|Ipadayon diin ka mihunong|Ablihi ang piho nga panid o set sa mga panid|Pinulongan sa display|Gipalabi nga mga pinulongan|Pagdugang og pinulongan|Tanyag nga hubaron ang mga panid|Spell check|Idugang|Gamita ang karon nga mga panid',
+es:'Ajustes|General|Al iniciar|Idioma|Privacidad y seguridad|Apariencia|Pestañas|Avanzado|Inicio|Nueva pestaña|Nueva pestaña de incógnito|Marcadores|Historial|Descargas|Sitio de escritorio|Añadir a marcadores|Buscar en la página|Abrir con|Compartir|Traducir página|Busca o introduce una dirección|JavaScript|Cookies|Abrir la página Nueva pestaña|Continuar donde lo dejaste|Abrir una página o un conjunto de páginas específico|Idioma de la interfaz|Idiomas preferidos|Añadir idioma|Ofrecer traducir páginas|Corrector ortográfico|Añadir|Usar páginas actuales',
+fr:"Paramètres|Général|Au démarrage|Langue|Confidentialité et sécurité|Apparence|Onglets|Avancé|Accueil|Nouvel onglet|Nouvel onglet privé|Favoris|Historique|Téléchargements|Version ordinateur|Ajouter aux favoris|Rechercher dans la page|Ouvrir avec|Partager|Traduire la page|Rechercher ou saisir une adresse|JavaScript|Cookies|Ouvrir la page Nouvel onglet|Reprendre là où vous vous étiez arrêté|Ouvrir une page ou un ensemble de pages spécifiques|Langue d'affichage|Langues préférées|Ajouter une langue|Proposer de traduire les pages|Correcteur orthographique|Ajouter|Utiliser les pages actuelles",
+de:'Einstellungen|Allgemein|Beim Start|Sprache|Datenschutz und Sicherheit|Darstellung|Tabs|Erweitert|Startseite|Neuer Tab|Neuer Inkognito-Tab|Lesezeichen|Verlauf|Downloads|Desktopversion|Lesezeichen hinzufügen|Auf Seite suchen|Öffnen mit|Teilen|Seite übersetzen|Suchen oder Adresse eingeben|JavaScript|Cookies|Seite „Neuer Tab“ öffnen|Dort fortfahren, wo ich aufgehört habe|Bestimmte Seite oder Seiten öffnen|Anzeigesprache|Bevorzugte Sprachen|Sprache hinzufügen|Übersetzung von Seiten anbieten|Rechtschreibprüfung|Hinzufügen|Aktuelle Seiten verwenden',
+ja:'設定|全般|起動時|言語|プライバシーとセキュリティ|デザイン|タブ|詳細設定|ホーム|新しいタブ|新しいシークレットタブ|ブックマーク|履歴|ダウンロード|PC版サイト|ブックマークに追加|ページ内を検索|アプリで開く|共有|ページを翻訳|検索または住所を入力|JavaScript|Cookie|新しいタブページを開く|前回開いていたページを開く|特定のページまたはページセットを開く|表示言語|優先言語|言語を追加|ページの翻訳を提案する|スペルチェック|追加|現在のページを使用'};
+const TR={};for(const c in PACK){const v=PACK[c].split('|');if(v.length!==KEYS.length)console.warn('i18n',c);TR[c]={};KEYS.forEach((k,i)=>TR[c][k]=v[i])}
+const tr=x=>(TR[st.lang]&&TR[st.lang][x])||x;
+const langQ=()=>{const c=st.plangs[0]==='fil'?'tl':st.plangs[0];return st.engine==='Google'?'&hl='+c:st.engine==='Bing'?'&setlang='+c:''};
+const startLabel=()=>({new:'New tab page',continue:'Continue where you left off',pages:st.spages.length+' specific page'+(st.spages.length===1?'':'s')}[st.startup]);
+function saveTabs(){const k=tabs.filter(x=>!x.inc);sv('nx.tabs',{cur:Math.max(0,k.indexOf(T())),tabs:k.map(x=>({h:x.h,i:x.i}))})}
+function boot(){
+ if(st.startup==='continue'){const d=ld('nx.tabs',null);if(d&&d.tabs&&d.tabs.length){tabs=d.tabs.map(x=>({inc:false,h:x.h,i:x.i}));cur=Math.min(d.cur||0,tabs.length-1)}}
+ else if(st.startup==='pages'&&st.spages.length){tabs=st.spages.map(u=>({inc:false,h:['',u],i:1}));cur=0}
+}
+// Real pages: each tab is a native Android WebView stacked under this UI (see MainActivity.kt).
+// This page stays transparent over the page area; the app tells us about navigation, loading and downloads.
+const tid=t=>t.id||(t.id=++uid);
+const NXc=(m,...a)=>{try{if(window.NX)NX[m](...a)}catch(e){}};
+function sync(){
+ tabs.forEach(tid);
+ if(!window.NX)return;
+ const u=view==='browse'?U():'',bar=$('.bar');
+ document.documentElement.classList.toggle('live',!!u);
+ let r=null;
+ if(u&&bar){const sb=$('.sb'),f=$('.find'),a=app.getBoundingClientRect();
+  r=[a.left,(sb||bar).getBoundingClientRect().bottom,a.right,f?f.getBoundingClientRect().top:innerHeight]}
+ NXc('sync',JSON.stringify({show:!!u,ov:!!menu,r,dpr:devicePixelRatio,cur:tid(T()),
+  bg:getComputedStyle(document.documentElement).getPropertyValue('--bg').trim(),
+  tabs:tabs.map(x=>({id:x.id,u:x.h[x.i]||'',inc:!!x.inc})),
+  js:!!st.js,ck:!!st.cookies,pop:!!st.popups,desk:!!st.desktop,ad:!!st.adblock,tk:!!st.btrack,bgl:st.bgload!==false,sd:{on:!!st.sdns,auto:st.sdnsMode!=='provider',url:dnsUrl()},
+  lang:st.plangs.map(c=>c==='fil'?'tl':c).join(',')}));
+}
+addEventListener('resize',()=>sync());
+// App -> page events
+window.nxPage=(id,u,rep)=>{
+ const x=tabs.find(y=>y.id===id);if(!x||!u||u==='about:blank'||u===x.h[x.i])return;
+ const old=x.h[x.i];
+ if(minimal(u)!==minimal(old))x.ico=null;x.title='';
+ if(rep){x.h[x.i]=u;if(!x.inc){const e=hist.slice(0,20).find(z=>z.u===old);if(e){e.u=u;sv('nx.hist',hist)}}}
+ else{x.h=x.h.slice(0,x.i+1);x.h.push(u);x.i++;if(!x.inc){hist.unshift({u,t:Date.now()});hist=hist.slice(0,200);sv('nx.hist',hist)}}
+ const a=document.activeElement&&document.activeElement.id;
+ if(view==='browse'&&x===T()&&a!=='ab'&&a!=='sq'&&a!=='fi')render();
+};
+window.nxMeta=(id,u,title,ico)=>{
+ const x=tabs.find(y=>y.id===id);if(!x)return;
+ const h=minimal(u);if(!h||h!==minimal(x.h[x.i]))return;
+ if(title){x.title=title;
+  if(!x.inc){const e=hist.slice(0,30).find(z=>z.u===u);if(e&&e.n!==title){e.n=title;sv('nx.hist',hist)}}}
+ if(ico){x.ico=ico;
+  if(!x.inc){delete FV[h];FV[h]=ico;const k=Object.keys(FV);if(k.length>120)delete FV[k[0]];sv('nx.fav',FV)}}
+ updTab(x)};
+function updTab(x){if(view!=='tabs')return;const c=document.querySelector('.card[data-tid="'+x.id+'"]');if(!c)return;
+ const b=c.querySelector('b');if(b)b.textContent=tabLabel(x);
+ const s=c.querySelector('small');if(s)s.textContent=tabSub(x);
+ const f=c.querySelector('.fv');if(f)f.outerHTML=fav(minimal(x.h[x.i])||'nexora',x.ico)}
+const tabLabel=x=>x.title||minimal(x.h[x.i])||'Nexora';
+const tabSub=x=>(x.inc?'Incognito':'Tab')+(x.title&&x.h[x.i]?' \u00b7 '+minimal(x.h[x.i]):'');
+window.nxCaps=c=>{caps=c||{};if(view==='browse'&&!T().h[T().i])render()};
+window.nxLoad=b=>{clearTimeout(busy.t);loading=b;const e=$('.ld');if(e){e.classList.remove('on');if(b){void e.offsetWidth;e.classList.add('on')}}};
+window.nxOpenTab=u=>{tabs.push({inc:false,h:['',u],i:1});cur=tabs.length-1;view='browse';menu=tm=false;tmode=false;
+ if(!hist.length||hist[0].u!==u){hist.unshift({u,t:Date.now()});hist=hist.slice(0,200);sv('nx.hist',hist)}render()};
+window.nxDl=l=>{const was=act().length,n=dl.length;dl=l.reverse();if(act().length<was)toast('Download complete');
+ if(view==='downloads'&&(n!==dl.length||act().length<was))render();else paint()};
+window.nxBackKey=()=>{
+ if(menu)menu=false;else if(tm)tm=false;else if(finding){finding=false;NXc('findDone')}
+ else if(view!=='browse')A.up();
+ else if(T().i>0)T().i--;
+ else return false;
+ render();return true};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+// Minimal address: domain only, no https://, www. or path
+const minimal=u=>{if(!u)return'';try{return new URL(u).hostname.replace(/^www\./,'')}catch(e){return u}};
+const FILE=/\.(zip|pdf|apk|mp4|mp3|exe|dmg|iso|7z|rar|docx?|xlsx?|pptx?|png|jpe?g)(\?.*)?$/i;
+const sq=u=>{try{const x=new URL(u);if(!Object.values(ENG).some(e=>new URL(e).hostname===x.hostname))return null;return x.searchParams.get('q')??x.searchParams.get('p')??x.searchParams.get('search')}catch(e){return null}};
+// Result categories per engine (Yahoo and Wikipedia have none here)
+const engOf=u=>{const h=new URL(u).hostname;return Object.keys(ENG).find(k=>new URL(ENG[k]).hostname===h)};
+function verts(u){
+ const e=engOf(u),q=encodeURIComponent(sq(u)),x=new URL(u),p=x.pathname,g=k=>x.searchParams.get(k),x2=e===st.engine?langQ():'';
+ const M={
+  Google:[['All',ENG.Google+q+x2,!g('tbm')],['Images',ENG.Google+q+'&tbm=isch',g('tbm')==='isch'],['Videos',ENG.Google+q+'&tbm=vid',g('tbm')==='vid'],['News',ENG.Google+q+'&tbm=nws',g('tbm')==='nws']],
+  Bing:[['All',ENG.Bing+q+x2,p==='/search'],['Images','https://www.bing.com/images/search?q='+q,p.startsWith('/images')],['Videos','https://www.bing.com/videos/search?q='+q,p.startsWith('/videos')],['News','https://www.bing.com/news/search?q='+q,p.startsWith('/news')]],
+  DuckDuckGo:[['All',ENG.DuckDuckGo+q,!g('iax')&&!g('iar')],['Images',ENG.DuckDuckGo+q+'&iax=images&ia=images',g('iax')==='images'],['Videos',ENG.DuckDuckGo+q+'&iax=videos&ia=videos',g('iax')==='videos'],['News',ENG.DuckDuckGo+q+'&iar=news&ia=news',!!g('iar')]],
+  'Brave Search':[['All',ENG['Brave Search']+q,p==='/search'],['Images','https://search.brave.com/images?q='+q,p.startsWith('/images')],['Videos','https://search.brave.com/videos?q='+q,p.startsWith('/videos')],['News','https://search.brave.com/news?q='+q,p.startsWith('/news')]]
+ };
+ return M[e]||[];
+}
+function sbar(q,u){
+ const v=verts(u);
+ return `<div class="sb"><div class="sbi">${ic('search')}<input id="sq" type="text" enterkeyhint="search" autocapitalize="off" autocomplete="off" spellcheck="${!!st.spell}" aria-label="Search" value="${esc(q)}"><button class="ib" data-c="sqclr" aria-label="Clear search">${ic('x')}</button></div>`+(v.length?`<div class="st" role="tablist">${v.map(([t,l,on])=>`<button role="tab" aria-selected="${on}" data-a="vert" data-u="${esc(l)}">${t}</button>`).join('')}</div>`:'')+'</div>';
+}
+const act=()=>dl.filter(d=>d.p<1);
+// Real downloads: Android's DownloadManager does the work and reports progress through nxDl()
+function startDl(u){NXc('download',u)}
+function paint(){const a=act(),p=a.length?a.reduce((s,d)=>s+d.p,0)/a.length*100:0,b=$('.mb');
+ if(b){b.classList.toggle('dl',!!a.length);b.querySelector('.ring').style.setProperty('--p',p);b.querySelector('.bd').textContent=a.length;b.setAttribute('aria-label',a.length?'Menu, '+a.length+' downloading':'Menu')}
+ dl.forEach(d=>{const e=document.querySelector('[data-id="'+d.id+'"]');if(e){e.querySelector('i').style.width=d.p*100+'%';e.querySelector('small').textContent=d.p<1?Math.round(d.p*100)+'%':'Done'}})}
+function busy(){loading=true;clearTimeout(busy.t);busy.t=setTimeout(()=>{loading=false;const e=$('.ld');e&&e.classList.remove('on')},15000)}
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),1800)}
+function nav(u){
+  if(st.newtab&&U()){tabs.push({inc:T().inc,h:[''],i:0});cur=tabs.length-1}
+  const t=T();t.h=t.h.slice(0,t.i+1);t.h.push(u);t.i++;if(u)busy();
+  if(u&&!t.inc){hist.unshift({u,t:Date.now()});hist=hist.slice(0,200);sv('nx.hist',hist)}
+}
+function go(text){
+  text=text.trim();if(!text)return;
+  const isUrl=/^https?:\/\//i.test(text)||/^[\w-]+(\.[\w-]+)+(:\d+)?(\/\S*)?$/.test(text);
+  const u=isUrl?(/^https?:/i.test(text)?text:'https://'+text):ENG[st.engine]+encodeURIComponent(text)+langQ();
+  if(isUrl&&FILE.test(u))return startDl(u);
+  rtab='all';rcount=6;nav(u);
+}
+const PROV={'OpenDNS':'https://doh.opendns.com/dns-query','Cloudflare (1.1.1.1)':'https://chrome.cloudflare-dns.com/dns-query','Google (Public DNS)':'https://dns.google/dns-query','CleanBrowsing (Family filter)':'https://doh.cleanbrowsing.org/doh/family-filter/','Custom':''};
+const PDNS={'Cloudflare (1.1.1.1)':'one.one.one.one','Google (Public DNS)':'dns.google','CleanBrowsing (Family filter)':'family-filter-dns.cleanbrowsing.org'};
+const dnsHost=()=>{if(st.sdnsProv==='Custom'){try{return new URL(st.sdnsUrl).hostname}catch(e){return ''}}return PDNS[st.sdnsProv]||''};
+const URLOK=/^https:\/\/[^\s\/]+\.[^\s]+$/i;
+// the DoH address the app should use in "With: provider" mode ('' means none / invalid)
+const dnsUrl=()=>{if(st.sdnsMode!=='provider')return '';const u=st.sdnsProv==='Custom'?st.sdnsUrl:PROV[st.sdnsProv];return URLOK.test(u||'')?u:''};
+let dnsSt=null,dnsN=0;
+window.nxDns=o=>{dnsSt=o;if(view==='secdns')render()};
+window.nxDnsCount=n=>{dnsN=n;const e=document.getElementById('dnsn');if(e)e.textContent=n};
+const dnsMsg=()=>{
+ if(!st.sdns)return 'Off. Sites are looked up with regular DNS.';
+ if(!window.NX)return 'Works inside the Android app.';
+ if(caps.dns===false)return "Not available: this device's WebView can't send lookups through Nexora. Use Android's Private DNS below.";
+ const s=dnsSt&&dnsSt.s,n=dnsSt&&dnsSt.n;
+ if(s==='active')return `Active. Lookups go to ${esc(n)} over HTTPS. Lookups so far: <b id="dnsn">${dnsN}</b>.`+(st.sdnsMode==='provider'?' If this provider can\'t be reached, pages won\'t load until you change it or turn this off.':' If it can\'t be reached, Nexora uses regular DNS.');
+ if(s==='none')return "Your current provider isn't one Nexora can upgrade, so regular DNS is used. Pick a provider under \"With:\" to encrypt lookups.";
+ if(s==='private')return "Android Private DNS is already encrypting lookups for every app, so nothing more is needed.";
+ if(s==='badurl')return 'Enter a valid HTTPS address to turn this on.';
+ if(s==='unsupported')return "Not available: this device's WebView can't send lookups through Nexora. Use Android's Private DNS below.";
+ if(s==='error')return "Couldn't start secure DNS. Regular DNS is in use.";
+ return 'Starting\u2026'};
+const dnsLabel=()=>!st.sdns?'Off (regular DNS)':'On · '+(st.sdnsMode==='auto'?'current provider':st.sdnsProv==='Custom'?'custom provider':st.sdnsProv);
+const IC={chevL:'<path d="m15 18-6-6 6-6"/>',chevR:'<path d="m9 18 6-6-6-6"/>',refresh:'<path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/>',home:'<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',plus:'<path d="M12 5v14M5 12h14"/>',incognito:'<path d="M4 12h16"/><path d="m6 12 1.5-6a1 1 0 0 1 1-.8h7a1 1 0 0 1 1 .8L18 12"/><circle cx="8" cy="17" r="2.5"/><circle cx="16" cy="17" r="2.5"/>',star:'<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',download:'<path d="M12 4v11m-5-5 5 5 5-5"/><path d="M5 20h14"/>',monitor:'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M9 20h6M12 16v4"/>',sliders:'<path d="M4 8h10M18 8h2M4 16h2M10 16h10"/><path d="M16 5v6M8 13v6"/>',search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',external:'<path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',share:'<path d="M12 15V4M8 8l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/>',x:'<path d="M6 6l12 12M18 6 6 18"/>',check:'<path d="m5 12 5 5 9-10"/>',dots:'<circle cx="12" cy="5" r="1.7" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="12" cy="19" r="1.7" fill="currentColor" stroke="none"/>',globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.3 3 14.7 0 18M12 3c-3 3.3-3 14.7 0 18"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6 19 19M5 19l1.4-1.4M17.6 6.4 19 5"/>',folder:'<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'};
+const ic=n=>`<svg class="i" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]}</svg>`;
+// Favicons are drawn locally (letter on a color from the site name): the preview can't fetch real ones
+const BR={'google.com':['#fff','#4285f4'],'youtube.com':['#e62117','#fff'],'search.brave.com':['#7c3aed','#fff']};
+const fav=(h,ico)=>{ico=ico||FV[h];if(ico&&/^data:image\/png;base64,[A-Za-z0-9+\/=]+$/.test(ico)){let q=0;for(const c of h)q=(q*31+c.charCodeAt(0))%360;return `<span class="fv fvi" style="--h:${q}"><img alt="" src="${ico}"></span>`}let k=0;for(const c of h)k=(k*31+c.charCodeAt(0))%360;const b=BR[h];return `<span class="fv" style="--h:${k};${b?`background:${b[0]};color:${b[1]}`:''}">${h[0].toUpperCase()}</span>`};
+const siteName=u=>{let x=null;if(sq(u)!==null)x=Object.keys(ENG).find(k=>new URL(ENG[k]).hostname===new URL(u).hostname);if(x)return x;const p=minimal(u).split('.'),n=p.length>1?p[p.length-2]:p[0];return n[0].toUpperCase()+n.slice(1)};
+const hd=(t,r='')=>`<div class="hd"><button class="ib" data-a="up" aria-label="Back">${ic('chevL')}</button><h1>${t}</h1>${r}</div>`;
+const tg=(k,t,s)=>`<div class="row"><div><b>${t}</b><small>${s}</small></div><button class="sw" role="switch" aria-label="${t}" aria-checked="${!!st[k]}" data-a="tg" data-k="${k}"></button></div>`;
+const lk=(a,t,s,i)=>`<button class="row" data-a="${a}">${i?`<span class="ci">${ic(i)}</span>`:''}<div style="flex:1"><b>${t}</b><small>${s}</small></div><span class="chev">${ic('chevR')}</span></button>`;
+const slc=(k,t,s,o)=>`<div class="row"><div><b>${t}</b><small>${s}</small></div><select aria-label="${t}" data-k="${k}">${o.map(x=>`<option${st[k]===x?' selected':''}>${x}</option>`).join('')}</select></div>`;
+const txt=(k,t,s)=>`<div class="row" style="display:block"><b>${t}</b><small>${s}</small><input style="max-width:100%;width:100%;box-sizing:border-box;margin-top:8px" data-k="${k}" value="${esc(st[k])}" placeholder="https://example.com"></div>`;
+const UP={search:'settings',secdns:'privacy',settings:'browse',language:'settings',startup:'settings',advanced:'settings',general:'settings',privacy:'settings',appearance:'settings',tabset:'settings',history:'browse',bookmarks:'browse',downloads:'browse',tabs:'browse'};
+const MI=(a,i,t,x='')=>`<button class="mi" data-a="${a}" ${x}><i>${ic(i)}</i>${t}</button>`;
+const VIEWS={
+ settings:()=>hd(tr('Settings'))+lk('v:general',tr('General'),'Search engine, homepage, default browser','sliders')+lk('v:startup',tr('On startup'),startLabel(),'home')+lk('v:language',tr('Language'),lname(st.lang),'globe')+lk('v:privacy',tr('Privacy & Security'),'History, site data, permissions','sliders')+lk('v:appearance',tr('Appearance'),'Theme, background, layout','sun')+lk('v:tabset',tr('Tabs'),'Link behavior','folder')+lk('v:advanced',tr('Advanced'),'Cookies, JavaScript','sliders'),
+ general:()=>hd(tr('General'))+slc('engine','Default search engine','Used for searches from the address bar',Object.keys(ENG))+txt('home','Homepage','Opened by the home button; empty uses the new tab page')+tg('desktop','Desktop site','Request the desktop layout in new tabs'),
+ privacy:()=>hd(tr('Privacy & Security'))+lk('clr:history','Clear browsing history','Removes saved history')+lk('clr:cookies','Clear cookies/site data','Reloads pages and clears recently closed tabs')+lk('clr:cache','Clear cache','Reloads every page fresh')+lk('clr:perms','Reset site permissions','Forget camera, microphone and location choices')+tg('adblock','Ad blocker','Block ads and trackers')+(st.adblock?tg('btrack','Block trackers','Also block known tracking scripts'):'')+lk('v:secdns','Secure DNS',dnsLabel())+tg('popups','Pop-ups','Allow pop-ups and redirects'),
+ appearance:()=>hd(tr('Appearance'))+slc('theme','Theme','Dark, light, or match your device',['dark','light','device'])+`<div class="row"><div><b>Accent color</b><small>Buttons, switches and highlights</small></div><input type="color" aria-label="Accent color" data-k="accent" value="${st.accent}"></div>`+tg('compact','Compact interface','Slightly smaller toolbar'),
+ search:()=>hd('Search')+'<p class="sh">Appearance</p>'+`<div class="tcs">${[['light','Light'],['dark','Dark'],['auto','Match browser']].map(([k,t])=>`<button class="tc ${k}${st.rtheme===k?' on':''}" data-a="rth" data-t="${k}" aria-label="${t} results theme" aria-pressed="${st.rtheme===k}"><i></i><i></i><i></i>${st.rtheme===k?`<span class="tk">${ic('check')}</span>`:''}</button>`).join('')}</div>`+tg('rnames','Site Names','Show the site name on each result')+tg('ricons','Site Icons','Show a site icon on each result')+slc('rfs','Font Size','',['Small','Medium','Large'])+slc('rfont','Font','',['System','Serif','Mono'])+tg('rcompact','Compact Results','Tighter spacing between results')+'<hr style="margin-top:12px"><p class="sh">General</p>'+slc('rlang','Display Language','Saved for the Android build',['Browser preference','English','Filipino','Español','Français','Deutsch','日本語'])+tg('rinf','Infinite Scroll','Load more results as you scroll')+tg('rnew','Open Links in a New Tab','Results open in a new tab'),
+ secdns:()=>{const cu=st.sdnsProv==='Custom',pm=st.sdnsMode==='provider',bad=cu&&st.sdnsUrl&&!/^https:\/\/[^\s\/]+\.[^\s]+$/i.test(st.sdnsUrl);
+  return hd('Secure DNS')+tg('sdns','Use secure DNS','Determines how to connect to websites over a secure connection')+(st.sdns?
+  `<div class="rd"><label><input type="radio" name="dm" data-k="sdnsMode" value="auto"${pm?'':' checked'}>With your current service provider<small>Your provider may not support secure DNS. Nexora then uses regular DNS.</small></label><label><input type="radio" name="dm" data-k="sdnsMode" value="provider"${pm?' checked':''}>With:</label></div>`+
+  `<div class="row" style="padding-top:0"><div style="flex:1"><small>${pm?(cu?'Enter a DNS-over-HTTPS address':esc(PROV[st.sdnsProv])):'Choose a provider'}</small></div><select aria-label="DNS provider" data-k="sdnsProv"${pm?'':' disabled'}>${Object.keys(PROV).map(x=>`<option${st.sdnsProv===x?' selected':''}>${x}</option>`).join('')}</select></div>`+
+  (pm&&cu?`<div class="row" style="display:block;padding-top:0"><input style="max-width:100%;width:100%;box-sizing:border-box" data-k="sdnsUrl" value="${esc(st.sdnsUrl)}" placeholder="https://example.com/dns-query" aria-label="Custom provider address"></div>${bad?'<p class="er">Enter a valid HTTPS address</p>':''}`:''):'')+
+  `<p class="note">${dnsMsg()}</p>`+
+   (st.sdns?`<hr style="margin-top:12px"><p class="sh">Other apps too</p><p class="note" style="margin-top:0">Secure DNS here covers Nexora only. Android's Private DNS covers every app, but needs a provider that supports DNS-over-TLS.</p>`+
+   (pm&&dnsHost()?`<div class="row"><div><b>Private DNS hostname</b><small>${esc(dnsHost())}</small></div><button style="color:var(--ac);background:none;border:0;padding:8px;cursor:pointer;font-weight:600" data-a="dnscopy" data-h="${esc(dnsHost())}">Copy</button></div>`:'')+
+   `<button class="row" data-a="dnsopen"><div style="flex:1"><b>Open Android Private DNS settings</b><small>Choose "Private DNS provider hostname" and paste the hostname</small></div><span class="chev">${ic('chevR')}</span></button>`:'')},
+ advanced:()=>hd(tr('Advanced'))+tg('cookies','Allow cookies','Let sites save and read cookies and site data. Off isolates every page from its stored data.')+tg('js','Allow JavaScript on sites','Let sites run scripts. Off stops many interactive pages from working.'),
+ startup:()=>hd(tr('On startup'))+'<div class="rd">'+[['new','Open the New tab page'],['continue','Continue where you left off'],['pages','Open a specific page or set of pages']].map(([v,l])=>`<label><input type="radio" name="su" data-k="startup" value="${v}"${st.startup===v?' checked':''}>${tr(l)}</label>`).join('')+'</div>'+(st.startup==='pages'?'<hr style="margin-top:8px">'+(st.spages.length?st.spages.map((u,i)=>`<div class="card flat">${fav(minimal(u))}<div><b>${esc(siteName(u))}</b><small>${esc(minimal(u))}</small></div><button class="ib" data-a="sprm" data-i="${i}" aria-label="Remove page">${ic('x')}</button></div>`).join(''):'<p class="mu" style="padding:20px">No pages yet.<br>Add one or use your open tabs.</p>')+`<div class="row"><input id="spi" inputmode="url" autocapitalize="off" placeholder="https://example.com" aria-label="Page address" style="max-width:none;flex:1"><button class="btn" style="margin:0;border:0;cursor:pointer" data-a="spadd">${tr('Add')}</button></div><button class="row" data-a="spcur"><b style="color:var(--ac)">${tr('Use current pages')}</b></button>`:''),
+ language:()=>hd(tr('Language'))+`<p class="sh">${tr('Display language')}</p>`+LANGS.filter(l=>l[0]==='en'||TR[l[0]]).map(([c,n])=>`<button class="row" data-a="setlang" data-c="${c}"><b>${n}</b>${st.lang===c?`<span class="ck2">${ic('check')}</span>`:''}</button>`).join('')+`<hr style="margin-top:12px"><p class="sh">${tr('Preferred languages')}</p><p class="note" style="margin-top:0">Search results use your top language on Google and Bing. Other sites choose their own.</p>`+st.plangs.map((c,i)=>`<div class="row"><div><b>${lname(c)}</b>${i?'':'<small>Top priority</small>'}</div><span style="display:flex"><button class="ib" data-a="plup" data-i="${i}" aria-label="Move up"${i?'':' disabled'} style="${i?'':'opacity:.3'}">↑</button><button class="ib" data-a="plrm" data-i="${i}" aria-label="Remove language">${ic('x')}</button></span></div>`).join('')+`<div class="row"><select id="nl" aria-label="${tr('Add language')}">${LANGS.filter(l=>!st.plangs.includes(l[0])).map(([c,n])=>`<option value="${c}">${n}</option>`).join('')}</select><button class="btn" style="margin:0;border:0;cursor:pointer" data-a="pladd">${tr('Add language')}</button></div><hr style="margin-top:12px">`+tg('offerTr',tr('Offer to translate pages'),'Adds Translate page to the menu')+tg('spell',tr('Spell check'),'Check spelling in the address bar and find box'),
+ tabset:()=>hd(tr('Tabs'))+tg('newtab','Open links in new tab','Address bar searches open a new tab')+tg('bgload','Load tabs in the background','Open tabs finish loading while you browse, one at a time. Uses more data and memory.')+tg('confirm','Confirm before closing all tabs','Ask first'),
+ history:()=>hd(tr('History'),hist.length?'<button class="tx" data-a="clr:history">Clear all</button>':'')+(hist.length?hist.map((h,i)=>`<div class="card flat" tabindex="0" data-a="open" data-i="${i}">${fav(minimal(h.u))}<div><b>${esc(h.n||siteName(h.u))}</b><small>${minimal(h.u)} · ${new Date(h.t).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}</small></div></div>`).join(''):'<p class="mu">No history yet.<br>Pages you visit appear here.</p>'),
+ bookmarks:()=>hd(tr('Bookmarks'))+(bm.length?bm.map((u,i)=>`<div class="card flat" tabindex="0" data-a="openbm" data-i="${i}">${fav(minimal(u))}<div><b>${esc(siteName(u))}</b><small>${minimal(u)}</small></div><button class="ib" data-a="rmbm" data-i="${i}" aria-label="Remove bookmark">${ic('x')}</button></div>`).join(''):'<p class="mu">No bookmarks yet.<br>Use the menu to add the current page.</p>'),
+ downloads:()=>hd(tr('Downloads'),`<button class="tx" data-a="addlink">${addLink?'Cancel':'Add link'}</button>`)+(addLink?'<div class="row" style="display:block"><input id="dli" style="max-width:100%;width:100%;box-sizing:border-box" placeholder="https://example.com/file.zip" aria-label="File link"><button class="btn" style="border:0;cursor:pointer" data-a="dlgo">Download</button></div>':'')+(dl.length?dl.map(d=>`<div class="card" data-id="${d.id}"><span class="av">${ic('download')}</span><div><b>${esc(d.n)}</b><small>${d.p<1?Math.round(d.p*100)+'%':'Done'}</small><div class="pb"><i style="width:${d.p*100}%"></i></div></div><button class="ib" data-a="dlrm" data-id="${d.id}" aria-label="Remove">${ic('x')}</button></div>`).join(''):'<p class="mu">No downloads.<br>Open a file link or tap Add link.</p>'),
+ tabs:()=>{
+  tabs.forEach(t=>{t.id=t.id||++uid});
+  const n=tabs.filter(t=>!t.inc).length,m=tabs.length-n;
+  const head=sel?hd(sel.size+' selected','<button class="tx" data-a="selall">All</button><button class="tx" data-a="seldel"'+(sel.size?'':' disabled')+'>Delete</button>'):hd(tr('Tabs'),'<button class="ib" data-a="newtab" aria-label="New tab">'+ic('plus')+'</button><button class="ib" data-a="tmenu" aria-label="More">'+ic('dots')+'</button>');
+  return head+
+  `<div class="seg"><button data-a="tmode" data-m="0" aria-pressed="${!tmode}">Tabs ${n}</button><button data-a="tmode" data-m="1" aria-pressed="${tmode}">Incognito ${m}</button></div>`+
+  tabs.map((t,i)=>{if(t.inc!==tmode)return'';const on=sel&&sel.has(t);return `<div class="card${i===cur&&!sel?' on':''}${on?' sl':''}" style="view-transition-name:t${t.id}" tabindex="0" data-tid="${t.id}" data-a="${sel?'tsel':'pick'}" data-i="${i}">${fav(minimal(t.h[t.i])||'nexora',t.ico)}<div><b>${esc(tabLabel(t))}</b><small>${esc(tabSub(t))}</small></div>${sel?`<span class="ck">${on?'✓':''}</span>`:`<button class="ib" data-a="close" data-i="${i}" aria-label="Close tab">${ic('x')}</button>`}</div>`}).join('')+
+  (tm?`<div class="ov" data-a="tmenu"></div><div class="menu" style="top:56px">${MI('newtab','plus','New tab')}${MI('newinc','incognito','New incognito tab')}<hr>${MI('reopen','clock','Reopen closed tab',closed.length?'':'disabled')}${MI('closeall','x','Close all tabs')}</div>`:'');
+ }
+};
+const A={
+ menu(){menu=!menu},
+ back(){const t=T();if(t.i>0)t.i--;menu=false},
+ fwd(){const t=T();if(t.i<t.h.length-1)t.i++;menu=false},
+ reload(){menu=false;NXc('reload',tid(T()));toast('Reloading')},
+ home(){menu=false;nav(st.home?(/^https?:/.test(st.home)?st.home:'https://'+st.home):'')},
+ newtab(){menu=tm=false;tabs.push({inc:false,h:[''],i:0});cur=tabs.length-1;view='browse';tmode=false},
+ newinc(){menu=tm=false;tabs.push({inc:true,h:[''],i:0});cur=tabs.length-1;view='browse';tmode=true},
+ v(d){menu=false;view=d.v},
+ up(){if(sel){sel=null;return}view=UP[view]||'browse'},
+ tabs(){view='tabs';sel=null;tmode=T().inc},
+ tmenu(){tm=!tm},
+ tmode(d){sel=null;tmode=d.m==='1'},
+ pick(d){cur=+d.i;view='browse'},
+ close(d){const i=+d.i;closed.push(tabs[i]);tabs.splice(i,1);if(!tabs.length)tabs.push({inc:false,h:[''],i:0});if(i<cur)cur--;cur=Math.min(cur,tabs.length-1)},
+ reopen(){tm=false;if(closed.length){tabs.push(closed.pop());cur=tabs.length-1;view='browse'}},
+ closeall(){tm=false;let ok=true;if(st.confirm){try{ok=confirm('Close all tabs?')}catch(e){}}if(ok){closed.push(...tabs);tabs=[{inc:false,h:[''],i:0}];cur=0;view='browse'}},
+ open(d){view='browse';nav(hist[+d.i].u)},
+ openbm(d){view='browse';nav(bm[+d.i])},
+ rmbm(d){bm.splice(+d.i,1);sv('nx.bm',bm)},
+ tg(d){st[d.k]=!st[d.k];sv('nx.st',st)},
+ clr(d){const k=d.a.split(':')[1];NXc('clear',k);if(k==='history'){hist=[];sv('nx.hist',hist);FV={};sv('nx.fav',FV)}toast(k==='history'?'History cleared':k==='cookies'?'Site data cleared':k==='perms'?'Site permissions reset':'Cache cleared')},
+ bookmark(){menu=false;const u=U();if(!u)return toast('Open a page first');if(!bm.includes(u)){bm.unshift(u);sv('nx.bm',bm)}toast('Added to bookmarks')},
+ find(){menu=false;finding=true},
+ closefind(){finding=false;NXc('findDone')},
+ desk(){menu=false;st.desktop=!st.desktop;sv('nx.st',st);toast('Desktop site '+(st.desktop?'on':'off'))},
+ openwith(){menu=false;if(U())NXc('openWith',U());else toast('Open a page first')},
+ share(){menu=false;const u=U();if(!u)return toast('Open a page first');NXc('share',u)},
+ setlang(d){st.lang=d.c;sv('nx.st',st)},
+ plup(d){const i=+d.i;if(i>0){[st.plangs[i-1],st.plangs[i]]=[st.plangs[i],st.plangs[i-1]];sv('nx.st',st)}},
+ plrm(d){if(st.plangs.length<2)return toast('Keep at least one language');st.plangs.splice(+d.i,1);sv('nx.st',st)},
+ pladd(){const v=($('#nl')||{}).value;if(v&&!st.plangs.includes(v)){st.plangs.push(v);sv('nx.st',st)}},
+ spadd(){const v=($('#spi').value||'').trim();if(!v)return;st.spages.push(/^https?:/i.test(v)?v:'https://'+v);sv('nx.st',st)},
+ sprm(d){st.spages.splice(+d.i,1);sv('nx.st',st)},
+ spcur(){st.spages=[...new Set(tabs.filter(x=>!x.inc&&x.h[x.i]).map(x=>x.h[x.i]))];sv('nx.st',st);toast(st.spages.length?'Using open tabs':'No open pages')},
+ translate(){menu=false;const u=U();if(!u)return toast('Open a page first');try{const x=new URL(u),l=st.lang==='fil'?'tl':st.lang;nav('https://'+x.hostname.replace(/-/g,'--').replace(/\./g,'-')+'.translate.goog'+x.pathname+(x.search?x.search+'&':'?')+'_x_tr_sl=auto&_x_tr_tl='+l+'&_x_tr_hl='+l)}catch(e){toast('Cannot translate this page')}},
+ vert(d){nav(d.u)},
+ soon(){toast('Coming soon')},
+ dnscopy(d){NXc('copy',d.h);toast('Hostname copied')},
+ dnsopen(){NXc('dnsSettings')},
+ rth(d){st.rtheme=d.t;sv('nx.st',st)},
+ addlink(){addLink=!addLink},
+ dlgo(){const v=($('#dli').value||'').trim();if(!v)return;startDl(/^https?:/i.test(v)?v:'https://'+v);addLink=false},
+ dlrm(d){NXc('dlRemove',String(d.id));dl=dl.filter(x=>String(x.id)!==d.id)},
+ rtab(d){rtab=d.t},
+ res(d){if(st.rnew&&!st.newtab){tabs.push({inc:T().inc,h:[''],i:0});cur=tabs.length-1}nav(d.u)},
+ tsel(d){const t=tabs[+d.i];sel.has(t)?sel.delete(t):sel.add(t)},
+ selall(){tabs.filter(t=>t.inc===tmode).forEach(t=>sel.add(t))},
+ seldel(){const k=sel.size,c=tabs[cur];closed.push(...sel);tabs=tabs.filter(t=>!sel.has(t));if(!tabs.length)tabs.push({inc:false,h:[''],i:0});cur=tabs.includes(c)?tabs.indexOf(c):Math.min(cur,tabs.length-1);sel=null;toast(k+(k>1?' tabs':' tab')+' closed')}
+};
+function menuHtml(){
+ const t=T();
+ return `<div class="ov" data-a="menu"></div><div class="menu" role="menu"><div class="nr"><button class="ib" data-a="back" aria-label="Back" ${t.i?'':'disabled'}>${ic('chevL')}</button><button class="ib" data-a="fwd" aria-label="Forward" ${t.i<t.h.length-1?'':'disabled'}>${ic('chevR')}</button><button class="ib" data-a="reload" aria-label="Reload">${ic('refresh')}</button></div>`+
+ MI('home','home',tr('Home'))+MI('newtab','plus',tr('New tab'))+MI('newinc','incognito',tr('New incognito tab'))+'<hr>'+MI('v:bookmarks','star',tr('Bookmarks'))+MI('v:history','clock',tr('History'))+MI('v:downloads','download',tr('Downloads')+(act().length?' ('+act().length+')':''))+MI('desk','monitor',tr('Desktop site')+(st.desktop?' ✓':''))+MI('v:settings','sliders',tr('Settings'))+'<hr>'+MI('bookmark','star',tr('Add to bookmarks'))+MI('find','search',tr('Find in page'))+MI('openwith','external',tr('Open with'))+MI('share','share',tr('Share'))+(st.offerTr?MI('translate','globe',tr('Translate page')):'')+'</div>';
+}
+function render(){
+ const r=document.documentElement;
+ if(st.theme==='device')r.removeAttribute('data-theme');else r.dataset.theme=st.theme;
+ r.style.setProperty('--ac',st.accent);r.lang=st.lang;
+ app.className=st.compact?'cp':'';
+ const u=U();let h;
+ if(view==='browse'){
+  h=`<div class="bar"><div class="abw"><div class="ab" style="width:${abW}px"><input id="ab" type="text" inputmode="url" autocapitalize="off" autocomplete="off" spellcheck="${!!st.spell}" placeholder="${esc(tr('Search or enter address'))}" aria-label="Address bar" value="${esc(minimal(u))}"><i class="ld${loading?' on':''}"></i></div></div><button class="cnt" data-a="tabs" aria-label="Tabs, ${tabs.length} open">${tabs.length}</button><button class="ib mb" data-a="menu" aria-label="Menu"><span class="ring"></span>${ic('dots')}<i class="bd"></i></button></div>`+(sq(u)!==null?sbar(sq(u),u):'')+
+  `<main>${u?'':`<div class="nt">Nexora${T().inc?'<small>Incognito: '+(caps.iso?'history and cookies are not kept':'history is not saved')+'</small>':''}</div>`}</main>`+
+  (finding?'<div class="find"><input id="fi" spellcheck="'+!!st.spell+'" placeholder="'+esc(tr('Find in page'))+'" aria-label="Find in page"><button class="tx" style="border:0;background:none;color:var(--ac);font-weight:600;cursor:pointer" data-a="closefind">Done</button></div>':'')+(menu?menuHtml():'');
+ } else h=VIEWS[view]();
+ ui.innerHTML=view==='browse'?h:`<main>${h}</main>`;
+ sync();if(st.startup==='continue')saveTabs();
+ paint();
+ requestAnimationFrame(()=>fit(document.activeElement&&document.activeElement.id==='ab'));
+}
+const RM=matchMedia('(prefers-reduced-motion:reduce)');
+// Smooth enter/exit: browser view transitions, skipped when unsupported or motion is reduced
+function vt(fn,dir){
+ if(!document.startViewTransition||RM.matches){fn();return}
+ document.documentElement.dataset.dir=dir||'';
+ document.startViewTransition(fn);
+}
+// Address bar fits the width of the shown text; full width while editing or empty
+let cvs;
+function fit(f){
+ const ab=$('.ab'),inp=$('#ab'),bar=$('.bar');if(!ab)return;
+ const avail=Math.max(120,bar.clientWidth-24-28-40-20);let w=avail;
+ if(!f&&U()){cvs=cvs||document.createElement('canvas').getContext('2d');cvs.font=getComputedStyle(inp).font;w=Math.min(avail,Math.max(150,Math.ceil(cvs.measureText(minimal(U())).width)+44))}
+ const cw=ab.offsetWidth;if(Math.abs(cw-w)>2){bar.classList.add('mv');clearTimeout(fit.t);fit.t=setTimeout(()=>bar.classList.remove('mv'),400)}abW=w;ab.style.width=w+'px';
+}
+addEventListener('resize',()=>fit(document.activeElement&&document.activeElement.id==='ab'));
+// Hold a tab to start multi-select
+let lpT,lpX,lpY;
+const lpc=()=>clearTimeout(lpT);
+document.addEventListener('pointerdown',e=>{
+ lp=false;const c=e.target.closest('.card[data-a="pick"]');if(!c||e.target.closest('button'))return;
+ lpX=e.clientX;lpY=e.clientY;
+ lpT=setTimeout(()=>{lp=true;navigator.vibrate&&navigator.vibrate(15);sel=new Set([tabs[+c.dataset.i]]);vt(render)},450);
+});
+document.addEventListener('pointerup',lpc);document.addEventListener('pointercancel',lpc);
+document.addEventListener('pointermove',e=>{if(Math.abs(e.clientX-lpX)>10||Math.abs(e.clientY-lpY)>10)lpc()});
+document.addEventListener('contextmenu',e=>{if(e.target.closest('.card'))e.preventDefault()});
+document.addEventListener('click',e=>{
+ if(lp){lp=false;return}
+ if(e.target.closest('[data-c="sqclr"]')){const i=$('#sq');i.value='';i.focus();return}
+ const el=e.target.closest('[data-a]');if(!el)return;
+ const d=Object.assign({},el.dataset),a=d.a.split(':')[0];
+ if(d.a.startsWith('v:')){d.v=d.a.slice(2)}
+  const f=A[a];if(f){const dir=d.a.startsWith('v:')||a==='tabs'?'fwd':a==='up'||a==='pick'?'back':'';vt(()=>{f(d);render()},dir)}
+});
+document.addEventListener('keydown',e=>{
+ if(e.target.id==='fi'&&e.key==='Enter'){NXc('findNext');return}
+ if(e.target.id==='sq'&&e.key==='Enter'){const v=e.target.value;e.target.blur();vt(()=>{go(v);render()});return}
+ if(e.target.id==='ab'&&e.key==='Enter'){const v=e.target.value;e.target.blur();vt(()=>{go(v);render()})}
+ else if((e.key==='Enter'||e.key===' ')&&(e.target.classList.contains('card')||e.target.classList.contains('rs'))&&e.target.dataset.a){e.preventDefault();e.target.click()}
+});
+document.addEventListener('focusin',e=>{if(e.target.id==='ab'){e.target.value=U();e.target.select();fit(true)}});
+document.addEventListener('focusout',e=>{if(e.target.id==='ab'){e.target.value=minimal(U());fit(false)}});
+document.addEventListener('input',e=>{if(e.target.id==='fi')NXc('find',e.target.value)});
+document.addEventListener('change',e=>{const k=e.target.dataset.k;if(k&&e.target.tagName!=='BUTTON'){st[k]=e.target.value;sv('nx.st',st);render()}});
+// Nexora is Android-only. #dev lets you open it on a desktop while testing.
+if(/Android/i.test(navigator.userAgent)||location.hash==='#dev'){boot();render()}
+else document.body.innerHTML='<div class="gate"><h1>Nexora</h1><p>Nexora is made only for Android devices.</p><p>Open this file on an Android phone or tablet.</p></div>';
+</script>
+</body>
+</html>
